@@ -1172,6 +1172,7 @@ a {
         /* スマホは“主張しすぎない”サイズに */
         padding: 0 14px;
         top: 12px;
+        filter: drop-shadow(0 12px 24px rgba(0,0,0,0.48));
     }
 
     .katana-wrapper { 
@@ -1195,7 +1196,22 @@ a {
     }
     
     .katana-blade {
+        /* スマホは厚みを少し落として“上品に”見せる */
+        height: calc(100% - 12px);
         min-height: 0;
+    }
+    
+    .katana-blade-svg {
+        /* 小さい画面だと“光り”が強く見えやすいので控えめに */
+        filter: drop-shadow(0 0 6px rgba(210, 216, 223, 0.08));
+    }
+
+    /* 刀身が薄くなる分、鎺/柄もスマホだけ少し薄くして全体の統一感を出す */
+    .katana-habaki {
+        height: calc(100% - 10px);
+    }
+    .katana-handle {
+        height: calc(100% - 8px);
     }
     
     .nav__logo {

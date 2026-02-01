@@ -42,6 +42,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const menuLinks = document.querySelectorAll('.menu-link');
     const katanaWrapper = document.getElementById('katanaWrapper');
     const katanaSaya = document.querySelector('.katana-saya');
+    const katanaBladeSvg = document.querySelector('.katana-blade-svg');
+
+    // --- 2.1 Katana SVG (Mobile) ---
+    // スマホ幅だとSVGが潰れて“ダサく”見えやすいので、比率を保って描画する
+    const katanaAspectMq = window.matchMedia('(max-width: 768px)');
+    const applyKatanaBladeAspect = () => {
+        if (!katanaBladeSvg) return;
+        katanaBladeSvg.setAttribute(
+            'preserveAspectRatio',
+            katanaAspectMq.matches ? 'xMinYMid meet' : 'none'
+        );
+    };
+    applyKatanaBladeAspect();
+    try {
+        katanaAspectMq.addEventListener('change', applyKatanaBladeAspect);
+    } catch {
+        // Safari古め対策
+        katanaAspectMq.addListener(applyKatanaBladeAspect);
+    }
 
     let isUnsheatheAnimating = false;
     let isDrawn = false;
