@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0c12">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>山口夏翔 | Natsuto Yamaguchi - Portfolio</title>
+    <meta name="description" content="インバウンド起業家 山口夏翔のポートフォリオサイト。日本の深い文化や体験を世界へ。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Zen+Old+Mincho:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=20260131-07">
+</head>
+<body>
+
+    <!-- 刀身の鋭い切っ先用 clipPath（左端を一点に収束） -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute">
+        <defs>
+            <clipPath id="blade-sharp-tip" clipPathUnits="objectBoundingBox">
+                <!-- 頂点(0,0.5)の隣を0.005に（丸められず鋭いV字になる） -->
+                <path d="M 0 0.5 L 0.005 0.47 L 0.03 0.33 L 0.1 0.25 L 0.2 0.18 L 0.35 0.12 L 0.5 0.08 L 0.65 0.06 L 0.8 0.05 L 0.9 0.04 L 1 0.04 L 1 0.96 L 0.9 0.96 L 0.8 0.97 L 0.65 0.98 L 0.5 0.99 L 0.35 0.995 L 0.2 0.998 L 0.1 0.998 L 0.05 0.99 L 0.01 0.97 L 0.005 0.53 Z"/>
+            </clipPath>
+        </defs>
+    </svg>
+
+    <div id="loader" class="loader">
+        <div class="loader__text-wrap">
+            <span class="loader__text">山</span>
+            <span class="loader__text">口</span>
+            <span class="loader__text">夏</span>
+            <span class="loader__text">翔</span>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <div class="katana-wrapper is-sheathed" id="katanaWrapper">
+            <!-- 鞘（さや）：柄タップで左へ抜けて刀身が現れる -->
+            <div class="katana-saya" aria-hidden="true"></div>
+            <div class="katana-blade">
+                <!-- 刀身（切っ先込み）：1枚SVGで形状/刃文を完全クリップ（はみ出しゼロ設計） -->
+                <svg class="katana-blade-svg" viewBox="0 0 1000 52" preserveAspectRatio="none" aria-hidden="true">
+                    <defs>
+                        <!-- 地鉄：峰側が明るく、刃側が締まる“面の変化”をグラデで表現 -->
+                        <linearGradient id="blade-steel" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#e8ebef"/>
+                            <stop offset="14%" stop-color="#cdd3db"/>
+                            <stop offset="28%" stop-color="#a8b1bf"/>
+                            <stop offset="52%" stop-color="#6c7787"/>
+                            <!-- 下側の黒い影を“上方向”に少し広げる -->
+                            <stop offset="66%" stop-color="#3a434e"/>
+                            <stop offset="100%" stop-color="#12171d"/>
+                        </linearGradient>
+
+                        <!-- 面の“艶”を横方向にほんの少しだけ（線ではなく帯） -->
+                        <linearGradient id="blade-sheen" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="rgba(255,255,255,0)"/>
+                            <stop offset="18%" stop-color="rgba(255,255,255,0.10)"/>
+                            <stop offset="45%" stop-color="rgba(255,255,255,0.06)"/>
+                            <stop offset="72%" stop-color="rgba(0,0,0,0.08)"/>
+                            <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                        </linearGradient>
+
+                        <!-- 刀身形状（デスクトップ）：
+                             ふくら(先端〜横手) : 刀身(残り) = 1 : 10  → ふくら=約91px -->
+                        <!-- 反り（sori）：刀身だけ“下方向”に反らせる（上下ラインとも中央が1px下がる） -->
+                        <path id="blade-shape-desktop" d="M 0 50 Q 500 52 1000 50 L 1000 2 Q 560 4 121 2 C 60 5, 26 22, 0 50 Z"/>
+                        <clipPath id="blade-clip-desktop">
+                            <use href="#blade-shape-desktop"/>
+                        </clipPath>
+
+                        <!-- 刀身形状（モバイル）：
+                             ふくら : 刀身 = 1 : 5（=刀身に対して1/5） → ふくら=約167px -->
+                        <path id="blade-shape-mobile" d="M 0 50 Q 500 52 1000 50 L 1000 2 Q 600 4 197 2 C 99 5, 40 22, 0 50 Z"/>
+                        <clipPath id="blade-clip-mobile">
+                            <use href="#blade-shape-mobile"/>
+                        </clipPath>
+
+                        <!-- 刃文：ぼかしはSVG内でクリップされるので、外へ滲まない -->
+                        <filter id="hamon-blur" x="-8%" y="-40%" width="116%" height="200%">
+                            <feGaussianBlur stdDeviation="0.9" />
+                        </filter>
+                    </defs>
+
+                    <!-- Desktop -->
+                    <g class="blade-variant blade-variant--desktop" clip-path="url(#blade-clip-desktop)">
+                        <use href="#blade-shape-desktop" fill="url(#blade-steel)"/>
+
+                        <!-- 光の帯：直線が目立つため削除 -->
+
+                        <!-- 横手（面の切り替え） -->
+                        <path d="M 121 6 L 121 46" stroke="rgba(0,0,0,0.34)" stroke-width="1.2" />
+                        <path d="M 121 6 L 121 46" stroke="rgba(255,255,255,0.10)" stroke-width="0.8" />
+
+                        <!-- 刃文（波模様）：左端まで伸ばし、上側へ移動 -->
+                        <g filter="url(#hamon-blur)" opacity="0.62">
+                            <!-- 3段に並べる（2pxずつ上へ） -->
+                            <path d="M 0 4
+                                     C 35 8, 70 18, 106 13
+                                     C 160 8, 230 18, 305 13
+                                     C 375 8, 450 17, 520 13
+                                     C 600 8, 690 17, 770 13
+                                     C 850 8, 930 16, 1000 13"
+                                  fill="none" stroke="rgba(231,235,239,0.90)" stroke-width="2.8" stroke-linecap="round"/>
+                            <path d="M 0 2
+                                     C 35 6, 70 16, 106 11
+                                     C 160 6, 230 16, 305 11
+                                     C 375 6, 450 15, 520 11
+                                     C 600 6, 690 15, 770 11
+                                     C 850 6, 930 14, 1000 11"
+                                  fill="none" stroke="rgba(231,235,239,0.70)" stroke-width="2.8" stroke-linecap="round"/>
+                            <path d="M 0 0
+                                     C 35 4, 70 14, 106 9
+                                     C 160 4, 230 14, 305 9
+                                     C 375 4, 450 13, 520 9
+                                     C 600 4, 690 13, 770 9
+                                     C 850 4, 930 12, 1000 9"
+                                  fill="none" stroke="rgba(231,235,239,0.52)" stroke-width="2.8" stroke-linecap="round"/>
+
+                            <path d="M 0 7
+                                     C 38 12, 78 20, 116 16
+                                     C 175 12, 245 20, 320 16
+                                     C 395 12, 470 19, 540 16
+                                     C 615 12, 705 20, 785 16
+                                     C 860 12, 940 19, 1000 17"
+                                  fill="none" stroke="rgba(214,221,226,0.45)" stroke-width="1.4" stroke-linecap="round"/>
+                            <path d="M 0 5
+                                     C 38 10, 78 18, 116 14
+                                     C 175 10, 245 18, 320 14
+                                     C 395 10, 470 17, 540 14
+                                     C 615 10, 705 18, 785 14
+                                     C 860 10, 940 17, 1000 15"
+                                  fill="none" stroke="rgba(214,221,226,0.32)" stroke-width="1.4" stroke-linecap="round"/>
+                            <path d="M 0 3
+                                     C 38 8, 78 16, 116 12
+                                     C 175 8, 245 16, 320 12
+                                     C 395 8, 470 15, 540 12
+                                     C 615 8, 705 16, 785 12
+                                     C 860 8, 940 15, 1000 13"
+                                  fill="none" stroke="rgba(214,221,226,0.22)" stroke-width="1.4" stroke-linecap="round"/>
+                        </g>
+                    </g>
+
+                    <!-- Mobile -->
+                    <g class="blade-variant blade-variant--mobile" clip-path="url(#blade-clip-mobile)">
+                        <use href="#blade-shape-mobile" fill="url(#blade-steel)"/>
+
+                        <!-- 横手（面の切り替え） -->
+                        <path d="M 197 6 L 197 46" stroke="rgba(0,0,0,0.34)" stroke-width="1.2" />
+                        <path d="M 197 6 L 197 46" stroke="rgba(255,255,255,0.10)" stroke-width="0.8" />
+
+                        <!-- 刃文（波模様）：左端まで伸ばし、上側へ移動 -->
+                        <g filter="url(#hamon-blur)" opacity="0.62">
+                            <!-- 3段に並べる（2pxずつ上へ） -->
+                            <path d="M 0 4
+                                     C 30 8, 60 18, 91 13
+                                     C 121 8, 151 18, 182 13
+                                     C 230 8, 300 18, 375 13
+                                     C 445 8, 520 17, 590 13
+                                     C 670 8, 760 17, 840 13
+                                     C 900 8, 950 16, 1000 13"
+                                  fill="none" stroke="rgba(231,235,239,0.90)" stroke-width="2.8" stroke-linecap="round"/>
+                            <path d="M 0 2
+                                     C 30 6, 60 16, 91 11
+                                     C 121 6, 151 16, 182 11
+                                     C 230 6, 300 16, 375 11
+                                     C 445 6, 520 15, 590 11
+                                     C 670 6, 760 15, 840 11
+                                     C 900 6, 950 14, 1000 11"
+                                  fill="none" stroke="rgba(231,235,239,0.70)" stroke-width="2.8" stroke-linecap="round"/>
+                            <path d="M 0 0
+                                     C 30 4, 60 14, 91 9
+                                     C 121 4, 151 14, 182 9
+                                     C 230 4, 300 14, 375 9
+                                     C 445 4, 520 13, 590 9
+                                     C 670 4, 760 13, 840 9
+                                     C 900 4, 950 12, 1000 9"
+                                  fill="none" stroke="rgba(231,235,239,0.52)" stroke-width="2.8" stroke-linecap="round"/>
+
+                            <path d="M 0 7
+                                     C 32 12, 64 20, 96 16
+                                     C 128 12, 160 20, 192 16
+                                     C 245 12, 315 20, 390 16
+                                     C 465 12, 540 19, 610 16
+                                     C 685 12, 775 20, 855 16
+                                     C 915 12, 960 19, 1000 17"
+                                  fill="none" stroke="rgba(214,221,226,0.45)" stroke-width="1.4" stroke-linecap="round"/>
+                            <path d="M 0 5
+                                     C 32 10, 64 18, 96 14
+                                     C 128 10, 160 18, 192 14
+                                     C 245 10, 315 18, 390 14
+                                     C 465 10, 540 17, 610 14
+                                     C 685 10, 775 18, 855 14
+                                     C 915 10, 960 17, 1000 15"
+                                  fill="none" stroke="rgba(214,221,226,0.32)" stroke-width="1.4" stroke-linecap="round"/>
+                            <path d="M 0 3
+                                     C 32 8, 64 16, 96 12
+                                     C 128 8, 160 16, 192 12
+                                     C 245 8, 315 16, 390 12
+                                     C 465 8, 540 15, 610 12
+                                     C 685 8, 775 16, 855 12
+                                     C 915 8, 960 15, 1000 13"
+                                  fill="none" stroke="rgba(214,221,226,0.22)" stroke-width="1.4" stroke-linecap="round"/>
+                        </g>
+                    </g>
+
+                    <!-- 輪郭（ごく薄い） -->
+                    <use class="blade-outline blade-outline--desktop" href="#blade-shape-desktop" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="0.8" stroke-linejoin="miter" stroke-miterlimit="6"/>
+                    <use class="blade-outline blade-outline--mobile" href="#blade-shape-mobile" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="0.8" stroke-linejoin="miter" stroke-miterlimit="6"/>
+                </svg>
+            </div>
+            
+            <div class="katana-habaki" aria-hidden="true"></div>
+            <div class="katana-guard"></div>
+            
+            <div class="katana-handle">
+                <!-- まずは“横長の筒（円柱）”だけ置く -->
+                <div class="katana-tsuka-tube" aria-hidden="true"></div>
+                <!-- 平巻：中央に菱形の“抜け”だけ並べる（中身は木目） -->
+                <div class="katana-tsuka-hishi" aria-hidden="true"></div>
+                <!-- 目貫（めぬき） -->
+                <div class="katana-menuki" aria-hidden="true"></div>
+
+                <!-- 柄全体をタップでメニューを開く（見た目の“別ボタン”は廃止） -->
+                <button class="nav__menu-btn nav__menu-btn--tsuka" id="menuBtn" type="button"
+                        aria-controls="menuOverlay" aria-expanded="false" aria-label="メニューを開く">
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="menu-overlay" id="menuOverlay">
+        <ul class="menu-list">
+            <li><a href="#vision" class="menu-link">Vision</a></li>
+            <li><a href="#about" class="menu-link">About</a></li>
+            <li><a href="#history" class="menu-link">Journey</a></li>
+            <li><a href="#gallery" class="menu-link">Gallery</a></li>
+            <li><a href="#tastes" class="menu-link">Tastes</a></li>
+            <li><a href="#contact" class="menu-link">Connect</a></li>
+        </ul>
+    </div>
+
+    <main class="container">
+        
+        <section class="hero" id="top">
+            <div class="hero__slider-container">
+                <div class="hero__slide active" style="background-image: url('images/EqUE-XHUcAE-xRd.jpeg');">
+                    </div>
+                <div class="hero__slide" style="background-image: url('images/EqUE-XHUcAE-xRd.jpeg');">
+                    </div>
+                <div class="hero__slide" style="background-image: url('images/EqUE-XHUcAE-xRd.jpeg');">
+                    </div>
+            </div>
+
+            <div class="hero__overlay"></div>
+            <div class="hero__content">
+                <p class="hero__subtitle fade-in">Authentic Japanese Cultural Experiences</p>
+                <div class="hero__name-section fade-in delay-2">
+                    <h2 class="hero__name-jp">山口夏翔</h2>
+                    <h3 class="hero__name-en">Natsuto Yamaguchi</h3>
+                    <p class="hero__role">Inbound Tourism Entrepreneur</p>
+                </div>
+            </div>
+
+            <div class="hero__indicators">
+                <span class="indicator active" data-slide="0"></span>
+                <span class="indicator" data-slide="1"></span>
+                <span class="indicator" data-slide="2"></span>
+            </div>
+
+            <div class="scroll-indicator">
+                <span>Scroll</span>
+                <div class="line"></div>
+            </div>
+        </section>
+
+        <section class="section vision" id="vision">
+            <div class="section__header parallax-element parallax-slow">
+                <div class="section__title-container">
+                    <h2 class="section__title">志</h2>
+                    <span class="section__subtitle">Vision & Mission</span>
+                </div>
+            </div>
+            <div class="content-wrapper">
+                <div class="vision__intro fade-up">
+                    <h3 class="vision__main-title">日本の深い文化や体験を<br>世界の人々に肌で感じてほしい。</h3>
+                    <p class="vision__description">
+                        私はインバウンド業界のベンチャー経営者として、本物の日本文化を伝えられる会社を創り<br>25歳までに最高のチームを創り上げることを目指しています。
+                    </p>
+                </div>
+
+                <div class="vision__goals fade-up">
+                    <h4 class="subsection-title">2026年の3つの柱</h4>
+                    <div class="goals-grid">
+                        <div class="goal-card fade-up" data-delay="100">
+                            <div class="goal-number">壱</div>
+                            <h5>全国通訳案内士試験合格</h5>
+                            <p>知識・技術を身につけ、プロとしての質を証明する。観光業界への本気度を示すため、語学・観光業界唯一の国家資格を取得します。</p>
+                        </div>
+                        <div class="goal-card fade-up" data-delay="200">
+                            <div class="goal-number">弐</div>
+                            <h5>ツアーガイド経験を積む</h5>
+                            <p>圧倒的に経験を積む。知識を学びながら、個人パッケージの販売やガイド会社での実務経験で実践力を磨きます。</p>
+                        </div>
+                        <div class="goal-card-wrap goal-card-wrap--center">
+                            <div class="goal-card fade-up" data-delay="300">
+                                <div class="goal-number">参</div>
+                                <h5>世界各地への旅</h5>
+                                <p>人生に彩りを与える。若いうちの興味・好奇心・体力を活かし、想像のつかない場所への旅で新しい価値観を見つけます。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vision__mindset fade-up">
+                    <blockquote class="philosophy-quote">
+                        <p>「曇りの空も、いつか雲が晴れて虹がかかる」</p>
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <section class="section about" id="about">
+            <div class="section__header">
+                <div class="section__title-container">
+                    <h2 class="section__title">己</h2>
+                    <span class="section__subtitle">About Me</span>
+                </div>
+            </div>
+            <div class="content-wrapper">
+                <div class="about__intro fade-up">
+                    <div class="about__profile">
+                        <div class="profile-image">
+                            <div class="image-placeholder" style="background-image: url('images/me icon.jpg'); background-size: cover; background-position: center;"></div>
+                        </div>
+                        <div class="profile-basic">
+                            <h3 class="profile-name">山口 夏翔 <span class="profile-name-en">Natsuto Yamaguchi</span></h3>
+                            <p class="profile-age">19歳 - 2006年7月29日生まれ</p>
+                            <p class="profile-location">大阪府在住</p>
+                            <p class="profile-status">インバウンド業界 修行中</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about__story fade-up">
+                    <h4 class="subsection-title">私のストーリー</h4>
+                    <div class="story-content">
+                        <p>
+                            2025年、アメリカのアイダホ州の大学に合格後、私は大きな決断を下しました。
+                            高額な学費と「今この瞬間の4年間」の価値を考え、実社会での挑戦を選択しました。
+                        </p>
+                        <p>
+                            学歴ではなく、実績・知識・人間力・行動力で未来を切り開く。
+                            その決意とともに、日本の深い文化を世界に伝えるインバウンド業界でのお仕事に全力で取り組んでいます。
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="about__tastes fade-up" id="tastes">
+                    <h4 class="subsection-title">嗜 - Tastes</h4>
+                    <p class="tastes__description">
+                        人生を豊かにしてくれる私の趣味と嗜好。
+                    </p>
+                    <div class="kura-container">
+                        
+                        <!-- 映画 -->
+                        <div class="taste-item cinema fade-up" data-delay="100">
+                            <div class="taste-icon">
+                                <div class="icon-bg">
+                                    <span class="taste-symbol">映</span>
+                                </div>
+                            </div>
+                            <div class="taste-content">
+                                <h4 class="taste-title">映画</h4>
+                                <p class="taste-description">物語が紡ぐ、異文化への入口</p>
+                                <div class="taste-details">
+                                    <span class="taste-detail">インプット</span>
+                                    <span class="taste-detail">視野</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- スポーツ -->
+                        <div class="taste-item sports fade-up" data-delay="200">
+                            <div class="taste-icon">
+                                <div class="icon-bg">
+                                    <span class="taste-symbol">体</span>
+                                </div>
+                            </div>
+                            <div class="taste-content">
+                                <h4 class="taste-title">スポーツ</h4>
+                                <p class="taste-description">熱量と集中力を取り戻す時間</p>
+                                <div class="taste-details">
+                                    <span class="taste-detail">継続</span>
+                                    <span class="taste-detail">リズム</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 旅行 -->
+                        <div class="taste-item travel fade-up" data-delay="300">
+                            <div class="taste-icon">
+                                <div class="icon-bg">
+                                    <span class="taste-symbol">旅</span>
+                                </div>
+                            </div>
+                            <div class="taste-content">
+                                <h4 class="taste-title">旅行</h4>
+                                <p class="taste-description">世界の解像度が上がる体験</p>
+                                <div class="taste-details">
+                                    <span class="taste-detail">学び</span>
+                                    <span class="taste-detail">発見</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="about__travel fade-up">
+                    <h4 class="subsection-title">海外経験 - Travel Experience</h4>
+                    <div class="travel-panel">
+                        <p class="travel-intro">8カ国以上での滞在・交流経験で、異文化理解と国際的な視野を身につけました。</p>
+                        <ul class="travel-grid" aria-label="海外経験">
+                            <li class="travel-item">
+                                <span class="travel-badge" aria-hidden="true">🇺🇸</span>
+                                <div class="travel-meta">
+                                    <h5>ハワイ</h5>
+                                    <p>世界の広さを実感。日本の外の多様性を初めて体感。</p>
+                                </div>
+                            </li>
+                            <li class="travel-item">
+                                <span class="travel-badge" aria-hidden="true">🇲🇾</span>
+                                <div class="travel-meta">
+                                    <h5>マレーシア</h5>
+                                    <p>イスラム文化との出会い。多民族国家の調和と、東南アジアの食文化を体験。</p>
+                                </div>
+                            </li>
+                            <li class="travel-item">
+                                <span class="travel-badge" aria-hidden="true">🇸🇬</span>
+                                <div class="travel-meta">
+                                    <h5>シンガポール</h5>
+                                    <p>アジアの先進国として日本を凌ぐ発展を目の当たりに。効率的な都市設計を学ぶ。</p>
+                                </div>
+                            </li>
+                            <li class="travel-item">
+                                <span class="travel-badge" aria-hidden="true">🇳🇨</span>
+                                <div class="travel-meta">
+                                    <h5>ニューカレドニア</h5>
+                                    <p>フランス語圏での留学。現地友人100人以上を作り、南国文化の自由さを体感。</p>
+                                </div>
+                            </li>
+                            <li class="travel-item">
+                                <span class="travel-badge" aria-hidden="true">🇹🇼</span>
+                                <div class="travel-meta">
+                                    <h5>台湾</h5>
+                                    <p>日本に最も近い食文化を発見。親日的な温かい人柄と、深い味わいの料理に感動。</p>
+                                </div>
+                            </li>
+                            <li class="travel-item">
+                                <span class="travel-badge" aria-hidden="true">🇺🇸</span>
+                                <div class="travel-meta">
+                                    <h5>シアトル</h5>
+                                    <p>自然と都市の共存を学ぶ。多様性の中で「当たり前」が更新される体験。</p>
+                                </div>
+                            </li>
+                            <li class="travel-item">
+                                <span class="travel-badge" aria-hidden="true">🇹🇭</span>
+                                <div class="travel-meta">
+                                    <h5>タイ</h5>
+                                    <p>想像以上の発展ぶりと物価の安さを実感。東南アジアの経済成長を肌で感じる。</p>
+                                </div>
+                            </li>
+                            <li class="travel-item">
+                                <span class="travel-badge" aria-hidden="true">🇻🇳</span>
+                                <div class="travel-meta">
+                                    <h5>ベトナム</h5>
+                                    <p>最も物価の安い国での体験。戦争の歴史を学び、困難から学ぶ重要性を実感。</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section history" id="history">
+            <div class="section__header">
+                <div class="section__title-container">
+                    <h2 class="section__title">道</h2>
+                    <span class="section__subtitle">Journey & Experience</span>
+                </div>
+            </div>
+            <div class="content-wrapper">
+                <div class="timeline">
+                    
+                    <div class="timeline__item fade-up">
+                        <div class="timeline__date">2026.01 - Present</div>
+                        <div class="timeline__content">
+                            <h3 class="timeline__title">YummyGuideで勤務開始</h3>
+                            <div class="timeline__tags">
+                                <span class="tag">スタートアップ</span>
+                                <span class="tag">実務経験</span>
+                                <span class="tag">リモート</span>
+                            </div>
+                            <p class="timeline__desc">
+                                東京のインバウンド業界スタートアップ企業でリモート勤務。週5日、現場でしか見つけられないニーズを学んでいます。
+                                週5日インバウンド業界に身を浸しています。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline__item fade-up">
+                        <div class="timeline__date">2026.01</div>
+                        <div class="timeline__content">
+                            <h3 class="timeline__title">志賀高原 ホテルニュー横手 - リゾートバイト</h3>
+                            <div class="timeline__tags">
+                                <span class="tag">ホテル業務</span>
+                                <span class="tag">外国人対応</span>
+                            </div>
+                            <p class="timeline__desc">
+                                長野県の日本一標高の高いスキー場ホテルでリゾートバイト。
+                                ホテル業務を経験すると同時に、初めてスノボをしました！
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline__more" id="timelineMore">
+
+                    <div class="timeline__item fade-up">
+                        <div class="timeline__date">2025.10 - Present</div>
+                        <div class="timeline__content">
+                            <h3 class="timeline__title">玄品ふぐ料理店-接客スタッフ</h3>
+                            <div class="timeline__tags">
+                                <span class="tag">おもてなし</span>
+                                <span class="tag">通訳</span>
+                            </div>
+                            <p class="timeline__desc">
+                                ふぐ料理専門レストランで、ホールスタッフや海外ゲストの通訳を担当。
+                                高品質な「おもてなし」で、日本の食文化を外国人に伝えています。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline__item fade-up">
+                        <div class="timeline__date">2025.07 - 2025.10</div>
+                        <div class="timeline__content">
+                            <h3 class="timeline__title">LotusCard Project</h3>
+                            <div class="timeline__tags">
+                                <span class="tag">起業経験</span>
+                                <span class="tag">市場分析</span>
+                            </div>
+                            <p class="timeline__desc">
+                                デジタル名刺販売の個人プロジェクトを立ち上げ・運営。
+                                3ヶ月間で30枚を販売。直接交渉で成功体験を積みました。
+                                市場選定と価値提案の重要性を学び、インバウンド業界への転向を決断。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline__item fade-up">
+                        <div class="timeline__date">2025.06</div>
+                        <div class="timeline__content">
+                            <h3 class="timeline__title">人生の転換点 - 大学進学辞退決断</h3>
+                            <div class="timeline__tags">
+                                <span class="tag">重要決断</span>
+                                <span class="tag">実践重視</span>
+                            </div>
+                            <p class="timeline__desc">
+                                アメリカのブリガムヤング大学の合格を辞退し、高卒起業家の道を決断。
+                                「今この瞬間の4年間」の価値を最大化するため、実社会での挑戦を選択。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline__item fade-up">
+                        <div class="timeline__date">2025.03 - 2025.10</div>
+                        <div class="timeline__content">
+                            <h3 class="timeline__title">大阪関西万博 - 運営チームリーダー</h3>
+                            <div class="timeline__tags">
+                                <span class="tag">リーダーシップ</span>
+                                <span class="tag">国際イベント</span>
+                            </div>
+                            <p class="timeline__desc">
+                                6ヶ月間、現場スタッフチームをリード。初月からリーダーに選ばれました。
+                                安全管理とスムーズな来場者対応を確保し、
+                                国際イベントの成功運営に貢献。様々な年齢層、キャリアの方々との出会いを経験。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline__item fade-up">
+                        <div class="timeline__date">2024.04</div>
+                        <div class="timeline__content">
+                            <h3 class="timeline__title">ニューカレドニア留学</h3>
+                            <div class="timeline__tags">
+                                <span class="tag">海外経験</span>
+                                <span class="tag">フランス語圏</span>
+                            </div>
+                            <p class="timeline__desc">
+                                フランス語圏で異文化コミュニケーション力を磨く。
+                                現地の友達100人以上を作り、国際的な人脈とグローバルな視野を身につけました。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline__item fade-up">
+                        <div class="timeline__date">2024.02 - 2024.09</div>
+                        <div class="timeline__content">
+                            <h3 class="timeline__title">生徒会長就任</h3>
+                            <div class="timeline__tags">
+                                <span class="tag">リーダーシップ</span>
+                                <span class="tag">校則改定</span>
+                            </div>
+                            <p class="timeline__desc">
+                                高校で生徒会長に就任。校則改訂を主導し、学生生活を現代化。
+                                学生の参加を高める大規模イベントを組織し、リーダーシップスキルを発展。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline__item fade-up">
+                        <div class="timeline__date">2023.07 - 2025.07</div>
+                        <div class="timeline__content">
+                            <h3 class="timeline__title">インターアクトクラブ プロジェクトリーダー</h3>
+                            <div class="timeline__tags">
+                                <span class="tag">ボランティア</span>
+                                <span class="tag">社会貢献</span>
+                            </div>
+                            <p class="timeline__desc">
+                                募金50万円超を集めるキャンペーンを行いました。
+                                服のチカラプロジェクト参加、災害出張募金、子供がんセンター募金活動、
+                                西成区炊き出しボランティアなど多様な社会貢献活動をリード。
+                            </p>
+                        </div>
+                    </div>
+
+                    </div>
+                    <div class="timeline__expand-wrap">
+                        <button type="button" class="timeline__expand-btn" id="timelineExpandBtn" aria-expanded="false">もっと見る</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section gallery" id="gallery">
+            <div class="section__header">
+                <div class="section__title-container">
+                    <h2 class="section__title">記憶</h2>
+                    <span class="section__subtitle">Perspective - Gallery</span>
+                </div>
+            </div>
+            <div class="gallery__intro fade-up">
+                <p class="gallery__description">
+                    私の目が切り取った日本の美しい瞬間。言葉を超えた感性で、日本の心を世界に伝えたい。
+                </p>
+            </div>
+            <div class="gallery__container">
+                <div class="gallery__scroll-track fade-up">
+                    <div class="gallery__item size-medium">
+                        <img src="images/memories/IMG_1065.jpg" alt="旅の記憶 - IMG_1065" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_1065</div>
+                    </div>
+                    <div class="gallery__item size-small">
+                        <img src="images/memories/IMG_1811.jpg" alt="旅の記憶 - IMG_1811" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_1811</div>
+                    </div>
+                    <div class="gallery__item size-large">
+                        <img src="images/memories/IMG_3080.jpg?v=1" alt="旅の記憶 - IMG_3080" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_3080</div>
+                    </div>
+                    <div class="gallery__item size-medium">
+                        <img src="images/memories/IMG_3170.jpg" alt="旅の記憶 - IMG_3170" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_3170</div>
+                    </div>
+                    <div class="gallery__item size-small">
+                        <img src="images/memories/IMG_4772.jpg" alt="旅の記憶 - IMG_4772" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_4772</div>
+                    </div>
+                    <div class="gallery__item size-large">
+                        <img src="images/memories/IMG_5262.jpg" alt="旅の記憶 - IMG_5262" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_5262</div>
+                    </div>
+                    <div class="gallery__item size-medium">
+                        <img src="images/memories/IMG_5406.jpg" alt="旅の記憶 - IMG_5406" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_5406</div>
+                    </div>
+                    <div class="gallery__item size-small">
+                        <img src="images/memories/IMG_5416.jpg" alt="旅の記憶 - IMG_5416" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_5416</div>
+                    </div>
+                    <div class="gallery__item size-large">
+                        <img src="images/memories/IMG_5509.jpg" alt="旅の記憶 - IMG_5509" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_5509</div>
+                    </div>
+                    <div class="gallery__item size-medium">
+                        <img src="images/memories/IMG_5578.jpg" alt="旅の記憶 - IMG_5578" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_5578</div>
+                    </div>
+                    
+                    <!-- 無限スクロール用の重複画像 -->
+                    <div class="gallery__item size-medium">
+                        <img src="images/memories/IMG_1065.jpg" alt="旅の記憶 - IMG_1065" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_1065</div>
+                    </div>
+                    <div class="gallery__item size-small">
+                        <img src="images/memories/IMG_1811.jpg" alt="旅の記憶 - IMG_1811" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_1811</div>
+                    </div>
+                    <div class="gallery__item size-large">
+                        <img src="images/memories/IMG_3080.jpg?v=1" alt="旅の記憶 - IMG_3080" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_3080</div>
+                    </div>
+                    <div class="gallery__item size-medium">
+                        <img src="images/memories/IMG_3170.jpg" alt="旅の記憶 - IMG_3170" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_3170</div>
+                    </div>
+                    <div class="gallery__item size-small">
+                        <img src="images/memories/IMG_4772.jpg" alt="旅の記憶 - IMG_4772" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_4772</div>
+                    </div>
+                    <div class="gallery__item size-large">
+                        <img src="images/memories/IMG_5262.jpg" alt="旅の記憶 - IMG_5262" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_5262</div>
+                    </div>
+                    <div class="gallery__item size-medium">
+                        <img src="images/memories/IMG_5406.jpg" alt="旅の記憶 - IMG_5406" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_5406</div>
+                    </div>
+                    <div class="gallery__item size-small">
+                        <img src="images/memories/IMG_5416.jpg" alt="旅の記憶 - IMG_5416" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_5416</div>
+                    </div>
+                    <div class="gallery__item size-large">
+                        <img src="images/memories/IMG_5509.jpg" alt="旅の記憶 - IMG_5509" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_5509</div>
+                    </div>
+                    <div class="gallery__item size-medium">
+                        <img src="images/memories/IMG_5578.jpg" alt="旅の記憶 - IMG_5578" loading="lazy">
+                        <div class="gallery__caption">旅の記憶 - IMG_5578</div>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery__nav">
+                <button class="gallery__nav-btn" id="galleryPrev">←</button>
+                <button class="gallery__nav-btn" id="galleryNext">→</button>
+            </div>
+        </section>
+
+
+        <section class="section contact" id="contact">
+            <div class="section__header">
+                <div class="section__title-container">
+                    <h2 class="section__title">結</h2>
+                    <span class="section__subtitle">Connect</span>
+                </div>
+            </div>
+            <div class="content-wrapper">
+                <div class="contact__inner fade-up">
+                    <div class="contact__social fade-up">
+                        <div class="social-grid">
+                            <a href="https://www.linkedin.com/in/natsuto-yamaguchi-870855343" target="_blank" class="social-card linkedin">
+                                <div class="social-icon"><img class="social-icon__img" src="images/social/linkedin.ico" alt="" loading="lazy"></div>
+                                <div class="social-info">
+                                    <h5>LinkedIn</h5>
+                                    <p>プロフェッショナルなつながり</p>
+                                </div>
+                                <div class="social-arrow">→</div>
+                            </a>
+                            
+                            <a href="https://line.me/R/ti/p/q-gD4gWwwC" target="_blank" class="social-card line">
+                                <div class="social-icon"><img class="social-icon__img" src="images/social/line.ico" alt="" loading="lazy"></div>
+                                <div class="social-info">
+                                    <h5>LINE</h5>
+                                    <p>気軽なメッセージ交換</p>
+                                </div>
+                                <div class="social-arrow">→</div>
+                            </a>
+                            
+                            <a href="https://www.instagram.com/__natsuto_/" target="_blank" class="social-card instagram">
+                                <div class="social-icon"><img class="social-icon__img" src="images/social/instagram.svg" alt="" loading="lazy"></div>
+                                <div class="social-info">
+                                    <h5>Instagram</h5>
+                                    <p>日常と旅の記録</p>
+                                </div>
+                                <div class="social-arrow">→</div>
+                            </a>
+                        </div>
+                        
+                        <div class="contact__email">
+                            <a href="mailto:baseball10210303@gmail.com" class="btn btn--outline">
+                                <span>Email</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="contact__info fade-up">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <strong>Email</strong>
+                                <span>baseball10210303@gmail.com</span>
+                            </div>
+                            <div class="info-item">
+                                <strong>Location</strong>
+                                <span>大阪府</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <small>&copy; 2026 Natsuto Yamaguchi. All Rights Reserved.</small>
+        </footer>
+
+    </main>
+
+    <script src="script.js?v=20260131-03"></script>
+</body>
+</html>

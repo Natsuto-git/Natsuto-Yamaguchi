@@ -1,0 +1,13 @@
+.DS_Store
+
+# OS / editor
+*.swp
+*.swo
+
+# Photos not used on web
+*.heic
+*.HEIC
+
+# Private notes (source materials)
+私の情報/
+
