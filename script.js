@@ -38,29 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- 2. Menu Toggle ---
     const menuBtn = document.getElementById('menuBtn');
+    const menuBtnTsuka = document.getElementById('menuBtnTsuka');
     const menuOverlay = document.getElementById('menuOverlay');
     const menuLinks = document.querySelectorAll('.menu-link');
     const katanaWrapper = document.getElementById('katanaWrapper');
     const katanaSaya = document.querySelector('.katana-saya');
-    const katanaBladeSvg = document.querySelector('.katana-blade-svg');
-
-    // --- 2.1 Katana SVG (Mobile) ---
-    // スマホ幅だとSVGが潰れて“ダサく”見えやすいので、比率を保って描画する
-    const katanaAspectMq = window.matchMedia('(max-width: 768px)');
-    const applyKatanaBladeAspect = () => {
-        if (!katanaBladeSvg) return;
-        katanaBladeSvg.setAttribute(
-            'preserveAspectRatio',
-            katanaAspectMq.matches ? 'xMinYMid meet' : 'none'
-        );
-    };
-    applyKatanaBladeAspect();
-    try {
-        katanaAspectMq.addEventListener('change', applyKatanaBladeAspect);
-    } catch {
-        // Safari古め対策
-        katanaAspectMq.addListener(applyKatanaBladeAspect);
-    }
+    const menuButtons = [menuBtn, menuBtnTsuka].filter(Boolean);
+    const isMobile = () => window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
 
     let isUnsheatheAnimating = false;
     let isDrawn = false;
@@ -76,11 +60,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const setMenuOpen = (next) => {
         menuOverlay.classList.toggle('open', next);
-        menuBtn.setAttribute('aria-expanded', String(next));
+        menuButtons.forEach(btn => btn.setAttribute('aria-expanded', String(next)));
     };
     
     const closeMenuAndResheathe = () => {
         setMenuOpen(false);
+        menuBtn && menuBtn.classList.remove('open');
+        // スマホでは日本刀自体を非表示にするので、抜刀/納刀は走らせない
+        if (isMobile()) return;
         // 抜刀アニメ中に閉じられた場合も“必ず納刀”へ切り替える
         if (isUnsheatheAnimating) {
             cancelUnsheatheAndResheathe();
@@ -198,21 +185,35 @@ document.addEventListener("DOMContentLoaded", () => {
         katanaSaya.addEventListener('animationend', onEnd);
     };
 
-    menuBtn.addEventListener('click', () => {
-        const isOpen = menuOverlay.classList.contains('open');
-        if (isOpen) {
-            closeMenuAndResheathe();
-            return;
-        }
+    menuButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const isOpen = menuOverlay.classList.contains('open');
+            const mode = btn.dataset && btn.dataset.menuMode;
 
-        // 初回は“抜刀→メニュー表示”
-        if (!isDrawn) {
-            unsheatheAndOpenMenu();
-            return;
-        }
+            // スマホ用（刀なし）：普通に開閉
+            if (mode === 'plain' || isMobile()) {
+                setMenuOpen(!isOpen);
+                // スマホは手裏剣を回して状態を分かりやすく
+                menuBtn && menuBtn.classList.toggle('open', !isOpen);
+                return;
+            }
 
-        // 既に抜刀済みなら即表示
-        setMenuOpen(true);
+            if (isOpen) {
+                closeMenuAndResheathe();
+                menuBtn && menuBtn.classList.remove('open');
+                return;
+            }
+
+            // 初回は“抜刀→メニュー表示”
+            if (!isDrawn) {
+                unsheatheAndOpenMenu();
+                return;
+            }
+
+            // 既に抜刀済みなら即表示
+            setMenuOpen(true);
+            menuBtn && menuBtn.classList.add('open');
+        });
     });
 
     // メニュー表示中：背景（オーバーレイ）タップで閉じる + 納刀

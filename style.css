@@ -334,6 +334,54 @@ a {
     padding: 0 30px;
 }
 
+/* Mobile-only menu button (shown when katana is hidden) */
+.nav__menu-btn--mobile {
+    display: none;
+    position: relative;
+    width: 54px;
+    height: 54px;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.nav__menu-btn--mobile .shuriken {
+    width: 42px;
+    height: 42px;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0 10px 18px rgba(0,0,0,0.55));
+    transform: rotate(12deg);
+}
+
+.nav__menu-btn--mobile .shuriken__blade {
+    fill: #0b0c10; /* black */
+    stroke: rgba(255, 255, 255, 0.14);
+    stroke-width: 1.1;
+    stroke-linejoin: miter;
+    vector-effect: non-scaling-stroke;
+}
+
+.nav__menu-btn--mobile .shuriken__hub {
+    fill: #0f1114; /* black (slightly lighter than blade) */
+    stroke: rgba(255, 255, 255, 0.18);
+    stroke-width: 1.1;
+    vector-effect: non-scaling-stroke;
+}
+
+.nav__menu-btn--mobile .shuriken__hole {
+    fill: #000;
+}
+
+.nav__menu-btn--mobile.open .shuriken {
+    transform: rotate(52deg);
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* 刀全体のコンテナ（細い刀身） */
 .katana-wrapper {
     display: flex;
@@ -683,8 +731,21 @@ a {
     transition: none;
 }
 
+/* shuriken uses transform transition (mobile only) */
+.nav__menu-btn--mobile,
+.nav__menu-btn--mobile .shuriken {
+    transition: none;
+}
+
+/* ホバーでボタンが“動く”のは不格好なので禁止（特にスマホ用手裏剣で顕著） */
 .nav__menu-btn:not(.nav__menu-btn--tsuka):hover {
-    transform: translateY(-50%);
+    transform: none;
+}
+
+/* 手裏剣ボタンは hover/active でも一切動かさない */
+.nav__menu-btn--mobile:hover,
+.nav__menu-btn--mobile:active {
+    transform: none !important;
 }
 
 @keyframes logoGlow {
@@ -1134,37 +1195,8 @@ a {
     outline-offset: 2px;
 }
 
-/* Open State - 旧ボタン用（柄タップ版では見た目を変えない） */
-.nav__menu-btn.open:not(.nav__menu-btn--tsuka) {
-    background: radial-gradient(circle at 30% 30%,
-        #dc2626 0%,
-        #b91c1c 30%,
-        #991b1b 60%,
-        #7f1d1d 100%
-    );
-}
-
-.nav__menu-btn.open:not(.nav__menu-btn--tsuka) .line:first-child { 
-    top: 15px;
-    transform: translateX(-50%) rotate(45deg);
-    width: 70%;
-    background: linear-gradient(90deg,
-        #fbbf24 0%,
-        #f59e0b 50%,
-        #fbbf24 100%
-    );
-}
-
-.nav__menu-btn.open:not(.nav__menu-btn--tsuka) .line:last-child { 
-    bottom: 15px;
-    transform: translateX(-50%) rotate(-45deg);
-    width: 70%;
-    background: linear-gradient(90deg,
-        #fbbf24 0%,
-        #f59e0b 50%,
-        #fbbf24 100%
-    );
-}
+/* Open State（赤/派手演出は不要なので廃止）
+   - スマホの手裏剣ボタンにも当たって“赤い背景”が出る原因になるため削除 */
 
 /* Mobile - 細い刀・銀部分を刀の形に完全フィット */
 @media (max-width: 768px) {
@@ -1172,47 +1204,20 @@ a {
         /* スマホは“主張しすぎない”サイズに */
         padding: 0 14px;
         top: 12px;
-        filter: drop-shadow(0 12px 24px rgba(0,0,0,0.48));
+        justify-content: flex-end;
     }
 
-    .katana-wrapper { 
-        /* スマホは全体を小さく（高さを下げるのが効く） */
-        --katana-h: clamp(28px, 7.2vw, 38px);
-        /* スマホでは刀を小さくして中央に収める */
-        --katana-max-w: 420px;
-        width: min(100%, var(--katana-max-w));
-        height: var(--katana-h);
-        /* 金具サイズも端末幅で破綻しないように */
-        --habaki-w: clamp(14px, 3.6vw, 18px);
-        --habaki-ext: clamp(6px, 1.8vw, 10px);
-        --habaki-overlap: clamp(8px, 2.2vw, 12px);
-        --tsuba-w: clamp(10px, 2.8vw, 14px);
-        /* バランス維持：刀身:柄 = 7:3 */
-        --blade-share: 0.7;
-        --tsuka-share: 0.3;
-        /* スマホは“最初の抜き”が大きく見えるので控えめに */
-        /* 抜刀/納刀の“1回止まる位置(マルイチ)”を50px右へ */
-        --saya-partial-pull: 30px;
-    }
-    
-    .katana-blade {
-        /* スマホは厚みを少し落として“上品に”見せる */
-        height: calc(100% - 12px);
-        min-height: 0;
-    }
-    
-    .katana-blade-svg {
-        /* 小さい画面だと“光り”が強く見えやすいので控えめに */
-        filter: drop-shadow(0 0 6px rgba(210, 216, 223, 0.08));
+    /* スマホでは日本刀を非表示 */
+    .katana-wrapper {
+        display: none !important;
     }
 
-    /* 刀身が薄くなる分、鎺/柄もスマホだけ少し薄くして全体の統一感を出す */
-    .katana-habaki {
-        height: calc(100% - 10px);
+    /* 代わりにシンプルなメニューボタンを表示 */
+    .nav__menu-btn--mobile {
+        display: block;
     }
-    .katana-handle {
-        height: calc(100% - 8px);
-    }
+
+    /* スマホでは日本刀を消すため、刀の個別調整は不要 */
     
     .nav__logo {
         font-size: 1rem;
@@ -1255,10 +1260,11 @@ a {
 .katana-blade-svg .blade-outline--desktop { display: inline; }
 
 @media (max-width: 768px) {
+    /* スマホでもPCと“完全同一形状”に統一（モバイル形状の差分は使わない） */
     .katana-blade-svg .blade-variant--mobile,
-    .katana-blade-svg .blade-outline--mobile { display: inline; }
+    .katana-blade-svg .blade-outline--mobile { display: none; }
     .katana-blade-svg .blade-variant--desktop,
-    .katana-blade-svg .blade-outline--desktop { display: none; }
+    .katana-blade-svg .blade-outline--desktop { display: inline; }
 }
 
 @media (min-width: 769px) {

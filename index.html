@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700&family=Zen+Old+Mincho:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=20260201-01">
+    <link rel="stylesheet" href="style.css?v=20260201-08">
 </head>
 <body>
 
@@ -35,6 +35,27 @@
     </div>
 
     <nav class="nav">
+        <!-- Mobile Menu Button (katana is hidden on mobile) -->
+        <button class="nav__menu-btn nav__menu-btn--mobile" id="menuBtn" type="button"
+                data-menu-mode="plain"
+                aria-controls="menuOverlay" aria-expanded="false" aria-label="メニューを開く">
+            <svg class="shuriken" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                <!-- Shuriken (8-point, concave) -->
+                <path class="shuriken__blade"
+                      d="M50 6
+                         L62 30
+                         L94 50
+                         L62 70
+                         L50 94
+                         L38 70
+                         L6 50
+                         L38 30
+                         Z"/>
+                <circle class="shuriken__hub" cx="50" cy="50" r="7.5"/>
+                <circle class="shuriken__hole" cx="50" cy="50" r="3.1"/>
+            </svg>
+        </button>
+
         <div class="katana-wrapper is-sheathed" id="katanaWrapper">
             <!-- 鞘（さや）：柄タップで左へ抜けて刀身が現れる -->
             <div class="katana-saya" aria-hidden="true"></div>
@@ -223,7 +244,7 @@
                 <div class="katana-menuki" aria-hidden="true"></div>
 
                 <!-- 柄全体をタップでメニューを開く（見た目の“別ボタン”は廃止） -->
-                <button class="nav__menu-btn nav__menu-btn--tsuka" id="menuBtn" type="button"
+                <button class="nav__menu-btn nav__menu-btn--tsuka" id="menuBtnTsuka" type="button"
                         aria-controls="menuOverlay" aria-expanded="false" aria-label="メニューを開く">
                 </button>
             </div>
@@ -818,6 +839,6 @@
 
     </main>
 
-    <script src="script.js?v=20260201-01"></script>
+    <script src="script.js?v=20260201-08"></script>
 </body>
 </html>
